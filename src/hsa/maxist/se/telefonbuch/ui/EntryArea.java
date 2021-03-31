@@ -1,6 +1,11 @@
 package hsa.maxist.se.telefonbuch.ui;
 
 import hsa.maxist.se.telefonbuch.data.TelefonEntry;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -24,9 +29,6 @@ public class EntryArea {
 
         Callback<TableColumn<TelefonEntry, String>, TableCell<TelefonEntry, String>> cellFactory = p -> new EditingCell();
 
-        TableColumn<TelefonEntry, Integer> iDCol = new TableColumn<>("Nr.");
-        iDCol.setOnEditCommit(null);
-
         TableColumn<TelefonEntry, String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         lastNameCol.setCellFactory(cellFactory);
@@ -41,6 +43,31 @@ public class EntryArea {
         emailCol.setCellValueFactory(new PropertyValueFactory<>("number"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
+
+        class NumberedCell extends TableCell {
+            protected void updateItem(Object object, boolean selected) {
+                setText(String.valueOf(getIndex()));
+            }
+        }
+
+        TableColumn<TelefonEntry, Integer> iDCol = new TableColumn<>("Nr.");
+        iDCol.setCellFactory(col -> {
+            TableCell<TelefonEntry, Integer> indexCell = new TableCell<>();
+            ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
+            ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
+                TableRow<TelefonEntry> row = rowProperty.get();
+                if (row != null) {
+                    int rowIndex = row.getIndex();
+                    if (rowIndex < row.getTableView().getItems().size()) {
+                        return Integer.toString(rowIndex);
+                    }
+                }
+                return null;
+            }, rowProperty);
+            indexCell.textProperty().bind(rowBinding);
+            return indexCell;
+        });
+        iDCol.setOnEditCommit(null);
 
         tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
