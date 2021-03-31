@@ -2,21 +2,20 @@ package hsa.maxist.se.telefonbuch.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class TelefonBook implements Iterable<TelefonEntry>{
 
-    ObservableList<TelefonEntry> telefonNumbers;
-    File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
-    String regex = "    ";
-    String empty = "###";
+    private final ObservableList<TelefonEntry> telefonNumbers;
+    private final File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
+    private final String regex = "    ";
+    private final String empty = "###";
 
     public TelefonBook() {
         telefonNumbers = FXCollections.observableArrayList();
@@ -33,8 +32,25 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         telefonNumbers.add(new TelefonEntry());
     }
 
-    public void search() {
+    public ObservableList<TelefonEntry> search(String term) {
 
+        if(term.matches(" *")) {
+            return telefonNumbers;
+        }
+
+        term = term.toLowerCase();
+
+        ObservableList<TelefonEntry> searchResults = FXCollections.observableArrayList();
+        for(TelefonEntry entry : telefonNumbers) {
+            if (entry.getFirstName().toLowerCase().contains(term)
+                || entry.getLastName().toLowerCase().contains(term)
+                || entry.getNumber().toLowerCase().contains(term))
+                searchResults.add(entry);
+        }
+
+        if(searchResults.size() == 0)
+            return telefonNumbers;
+        return searchResults;
     }
 
     public void save() {
@@ -54,7 +70,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         try {
             scanner = new Scanner(savedBook);
         } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println("Couldn't load the requested File.");
+            System.out.println("Couldn't load the requested file.");
         }
         if(scanner != null)
             try {
@@ -107,19 +123,19 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
         for (TelefonEntry entry : telefonNumbers) {
             // First Name
-            if(entry.getFirstName() == null || entry.getFirstName().equals("") || entry.getFirstName().equals(TelefonEntry.empty))
+            if(entry.getFirstName().equals("") || entry.getFirstName().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getFirstName());
             content.append(regex);
 
             // Last Name
-            if(entry.getLastName() == null || entry.getLastName().equals("") || entry.getLastName().equals(TelefonEntry.empty))
+            if(entry.getLastName().equals("") || entry.getLastName().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getLastName());
             content.append(regex);
 
             // Number
-            if (entry.getNumber() == null || entry.getNumber().equals("") || entry.getNumber().equals(TelefonEntry.empty))
+            if (entry.getNumber().equals("") || entry.getNumber().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getNumber());
 

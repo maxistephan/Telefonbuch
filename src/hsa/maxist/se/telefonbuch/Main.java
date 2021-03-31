@@ -20,13 +20,14 @@ public class Main extends Application {
         TelefonBook telefonBook = new TelefonBook();
         telefonBook.load();
 
-        // Search Area
-        SearchArea searchArea = new SearchArea(event1 -> telefonBook.search());
-        root.setTop(searchArea.getPane());
-
         // Entry Area
         EntryArea entryArea = new EntryArea(telefonBook.getTelefonNumbers());
         root.setCenter(entryArea.getAnchorPane());
+
+        // Search Area
+        SearchArea searchArea = new SearchArea(telefonBook);
+        searchArea.setAction(onSearch -> entryArea.setItems(telefonBook.search(searchArea.getSearchText())));
+        root.setTop(searchArea.getPane());
 
         // Delete Area
         DeleteArea deleteArea = new DeleteArea(

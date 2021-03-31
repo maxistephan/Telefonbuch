@@ -13,6 +13,8 @@ public class TelefonEntry {
     public TelefonEntry() {
         firstName = empty;
         id = numOfInstances++;
+        lastName = "";
+        number = "";
     }
 
     public void setLastName(String lastName) {
