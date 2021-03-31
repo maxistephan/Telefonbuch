@@ -22,7 +22,7 @@ public class Main extends Application {
     File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         BorderPane root = new BorderPane();
 
