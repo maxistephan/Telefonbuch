@@ -16,8 +16,6 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-    File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
-
     @Override
     public void start(Stage primaryStage) {
 
@@ -43,7 +41,8 @@ public class Main extends Application {
         // Fenster Einstellen
         primaryStage.setTitle("Telefon Buch");
         primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.setOnCloseRequest(windowEvent -> saveContent(telefonBook));
+        // save on close
+        primaryStage.setOnCloseRequest(windowEvent -> telefonBook.save());
         primaryStage.show();
     }
 
@@ -55,37 +54,5 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    /*******************************************************************************************************************
-     *
-     * On Close Operation (Save)
-     *
-     *******************************************************************************************************************/
-
-    private void saveContent(TelefonBook telefonBook) {
-            // Content Holen
-            StringBuilder content = new StringBuilder();
-
-            for (TelefonEntry entry : telefonBook) {
-                if(entry.getFirstName().equals("Click to edit")) {
-                    content.append('\n');
-                    continue;
-                }
-                content.append(entry.getFirstName()).append("    ");
-                content.append(entry.getLastName()).append("    ");
-                content.append(entry.getNumber()).append("\n");
-            }
-
-            try {
-                // Content schreiben
-                FileWriter writer = new FileWriter(savedBook);
-                writer.write(content.toString());
-                writer.close();
-                System.out.println("Content Saved!");
-            } catch (IOException ioe) {
-                System.out.println("Something went wrong while saving");
-                ioe.printStackTrace();
-            }
     }
 }
