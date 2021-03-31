@@ -49,7 +49,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         }
     }
 
-    public void read() {
+    public void load() {
 
         Scanner scanner = null;
         try {
@@ -66,7 +66,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
                     // if not empty
                     if(lines.length != 0) {
 
-                        // make actually empty cells out of read empty signs
+                        // make actually empty cells out of empty signs
                         for(int i = 0; i < lines.length; i++) {
                             if(lines[i].equals(empty))
                                 lines[i] = "";

@@ -1,7 +1,6 @@
 package hsa.maxist.se.telefonbuch;
 
 import hsa.maxist.se.telefonbuch.data.TelefonBook;
-import hsa.maxist.se.telefonbuch.data.TelefonEntry;
 import hsa.maxist.se.telefonbuch.ui.DeleteArea;
 import hsa.maxist.se.telefonbuch.ui.EntryArea;
 import hsa.maxist.se.telefonbuch.ui.SearchArea;
@@ -9,10 +8,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Main extends Application {
 
@@ -23,7 +18,7 @@ public class Main extends Application {
 
         // Telefon Buch instanzieren
         TelefonBook telefonBook = new TelefonBook();
-        telefonBook.read();
+        telefonBook.load();
 
         // Search Area
         SearchArea searchArea = new SearchArea(telefonBook::search);
