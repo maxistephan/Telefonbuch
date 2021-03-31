@@ -25,6 +25,9 @@ public class EntryArea {
 
         Callback<TableColumn<TelefonEntry, String>, TableCell<TelefonEntry, String>> cellFactory = p -> new EditingCell();
 
+        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
+        iDCol.setCellValueFactory(new PropertyValueFactory<TelefonEntry, String>("id"));
+
         TableColumn<TelefonEntry, String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         lastNameCol.setCellFactory(cellFactory);
@@ -39,26 +42,6 @@ public class EntryArea {
         emailCol.setCellValueFactory(new PropertyValueFactory<>("number"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
-
-        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
-        iDCol.setCellValueFactory(new PropertyValueFactory<TelefonEntry, String>("id"));
-//        iDCol.setCellFactory(col -> {
-//            TableCell<TelefonEntry, String> indexCell = new TableCell<>();
-//            ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
-//            ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
-//                TableRow<TelefonEntry> row = rowProperty.get();
-//                if (row != null) {
-//                    int rowIndex = row.getIndex();
-//                    System.out.println("chello");
-//                    if (rowIndex < row.getTableView().getItems().size()) {
-//                        return Integer.toString(rowIndex);
-//                    }
-//                }
-//                return null;
-//            }, rowProperty);
-//            indexCell.textProperty().bind(rowBinding);
-//            return indexCell;
-//        });
 
         tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
