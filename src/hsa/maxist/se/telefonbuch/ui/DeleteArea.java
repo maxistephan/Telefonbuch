@@ -14,18 +14,25 @@ public class DeleteArea {
     public DeleteArea(EntryArea entryArea, TelefonBook telefonBook) {
 
         Button deleteButon = new Button("Delete");
-        AnchorPane.setTopAnchor(deleteButon, 10.0);
-        AnchorPane.setRightAnchor(deleteButon, 10.0);
-        AnchorPane.setBottomAnchor(deleteButon, 10.0);
-
         deleteButon.onActionProperty().setValue(actionEvent -> {
             ObservableList<TelefonEntry> selected = entryArea.getSelectedEntries();
             for(TelefonEntry item : selected) {
                 telefonBook.getTelefonNumbers().remove(item);
             }
         });
+        AnchorPane.setTopAnchor(deleteButon, 10.0);
+        AnchorPane.setRightAnchor(deleteButon, 10.0);
+        AnchorPane.setBottomAnchor(deleteButon, 10.0);
 
-        anchorPane.getChildren().addAll(deleteButon);
+        Button addButton = new Button("+");
+        addButton.onActionProperty().setValue(actionEvent -> {
+            telefonBook.getTelefonNumbers().add(new TelefonEntry());
+        });
+        AnchorPane.setLeftAnchor(addButton, 10.0);
+        AnchorPane.setTopAnchor(addButton, 10.0);
+        AnchorPane.setBottomAnchor(addButton, 10.0);
+
+        anchorPane.getChildren().addAll(deleteButon, addButton);
     }
 
     public Node getPane() {

@@ -49,7 +49,7 @@ public class Main extends Application {
         DeleteArea deleteArea = new DeleteArea(entryArea, telefonBook);
         root.setBottom(deleteArea.getPane());
 
-        // Fenster Anzeigen
+        // Fenster Einstellen
         primaryStage.setTitle("Telefon Buch");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.setOnCloseRequest(saveContent(telefonBook));
@@ -79,6 +79,7 @@ public class Main extends Application {
             StringBuilder content = new StringBuilder();
 
             for (TelefonEntry entry : telefonBook) {
+                if(entry.getFirstName().equals("Click to edit")) content.append('\n');
                 content.append(entry.getFirstName()).append("    ");
                 content.append(entry.getLastName()).append("    ");
                 content.append(entry.getNumber()).append("\n");

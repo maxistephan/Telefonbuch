@@ -7,6 +7,10 @@ public class TelefonEntry {
     private String firstName;
     private String number;
 
+    public TelefonEntry() {
+        firstName = "Click to edit";
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

@@ -39,7 +39,6 @@ public class EntryArea {
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
-
         tableView.getColumns().add(firstNameCol);
         tableView.getColumns().add(lastNameCol);
         tableView.getColumns().add(emailCol);
