@@ -25,8 +25,8 @@ public class Main extends Application {
         root.setCenter(entryArea.getAnchorPane());
 
         // Search Area
-        SearchArea searchArea = new SearchArea(telefonBook);
-        searchArea.setAction(onSearch -> entryArea.setItems(telefonBook.search(searchArea.getSearchText())));
+        SearchArea searchArea = new SearchArea();
+        searchArea.setButtonAction(onSearch -> entryArea.setItems(telefonBook.search(searchArea.getSearchText())));
         root.setTop(searchArea.getPane());
 
         // Delete Area
