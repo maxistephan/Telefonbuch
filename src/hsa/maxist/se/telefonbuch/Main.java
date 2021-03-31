@@ -54,7 +54,7 @@ public class Main extends Application {
         // Fenster Einstellen
         primaryStage.setTitle("Telefon Buch");
         primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.setOnCloseRequest(saveContent(telefonBook));
+        primaryStage.setOnCloseRequest(windowEvent -> saveContent(telefonBook));
         primaryStage.show();
     }
 
@@ -74,9 +74,7 @@ public class Main extends Application {
      *
      *******************************************************************************************************************/
 
-    private EventHandler<WindowEvent> saveContent(TelefonBook telefonBook) {
-        return windowEvent -> {
-
+    private void saveContent(TelefonBook telefonBook) {
             // Content Holen
             StringBuilder content = new StringBuilder();
 
@@ -100,6 +98,5 @@ public class Main extends Application {
                 System.out.println("Something went wrong while saving");
                 ioe.printStackTrace();
             }
-        };
     }
 }
