@@ -13,9 +13,12 @@ import java.util.*;
 public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
+    private ObservableList<TelefonEntry> searchResults;
     private final File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
     private final String regex = "    ";
     private final String empty = "###";
+
+    private boolean isSearching = false;
 
     public TelefonBook() {
         telefonNumbers = FXCollections.observableArrayList();
@@ -24,23 +27,30 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     public void delete(ObservableList<TelefonEntry> selected){
         for (TelefonEntry item : selected) {
             telefonNumbers.remove(item);
+            if(isSearching)
+                searchResults.remove(item);
         }
         update();
     }
 
     public void add() {
-        telefonNumbers.add(new TelefonEntry());
+        TelefonEntry newEntry = new TelefonEntry();
+        telefonNumbers.add(newEntry);
+        if(isSearching)
+            searchResults.add(newEntry);
     }
 
     public ObservableList<TelefonEntry> search(String term) {
 
         if(term.matches(" *")) {
+            isSearching = false;
             return telefonNumbers;
         }
 
+        isSearching = true;
         term = term.toLowerCase();
 
-        ObservableList<TelefonEntry> searchResults = FXCollections.observableArrayList();
+        searchResults = FXCollections.observableArrayList();
         for(TelefonEntry entry : telefonNumbers) {
             if (entry.getFirstName().toLowerCase().contains(term)
                 || entry.getLastName().toLowerCase().contains(term)
@@ -48,8 +58,10 @@ public class TelefonBook implements Iterable<TelefonEntry>{
                 searchResults.add(entry);
         }
 
-        if(searchResults.size() == 0)
+        if(searchResults.size() == 0) {
+            isSearching = false;
             return telefonNumbers;
+        }
         return searchResults;
     }
 
