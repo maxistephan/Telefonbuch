@@ -6,16 +6,13 @@ import hsa.maxist.se.telefonbuch.ui.DeleteArea;
 import hsa.maxist.se.telefonbuch.ui.EntryArea;
 import hsa.maxist.se.telefonbuch.ui.SearchArea;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 
 public class Main extends Application {
 
@@ -28,18 +25,9 @@ public class Main extends Application {
 
         // Telefon Buch instanzieren
         TelefonBook telefonBook = new TelefonBook();
-        TelefonEntry peter = new TelefonEntry();
 
         SearchArea searchArea = new SearchArea(telefonBook::search);
         root.setTop(searchArea.getPane());
-
-        // Nummern hinzufügen
-        telefonBook.getTelefonNumbers().add(peter);
-        telefonBook.getTelefonNumbers().add(new TelefonEntry());
-
-        peter.setNumber("0821/2799555");
-        peter.setFirstName("Peter");
-        peter.setLastName("Peterson");
 
         // Entry Area
         EntryArea entryArea = new EntryArea(telefonBook.getTelefonNumbers());
