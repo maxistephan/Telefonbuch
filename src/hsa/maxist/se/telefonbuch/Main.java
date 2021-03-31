@@ -26,6 +26,7 @@ public class Main extends Application {
         // Telefon Buch instanzieren
         TelefonBook telefonBook = new TelefonBook();
 
+        // Search Area
         SearchArea searchArea = new SearchArea(telefonBook::search);
         root.setTop(searchArea.getPane());
 
