@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 public class DeleteArea {
 
     AnchorPane anchorPane = new AnchorPane();
-    private final Button deleteButon = new Button("Löschen");
+    private final Button deleteButon = new Button("Delete");
 
     public DeleteArea() {
 

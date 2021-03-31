@@ -11,7 +11,7 @@ public class SearchArea {
 
     private final AnchorPane anchorPane = new AnchorPane();
     private final TextField searchTextField = new TextField();
-    private final Button searchButton = new Button("Suchen");
+    private final Button searchButton = new Button("Search");
 
     public SearchArea() {
         AnchorPane.setLeftAnchor(searchTextField, 10.0);

@@ -41,11 +41,11 @@ public class Main extends Application {
         peter.setFirstName("Peter");
         peter.setLastName("Peterson");
 
-        // Entry Area Bauen
+        // Entry Area
         EntryArea entryArea = new EntryArea(telefonBook.getTelefonNumbers());
         root.setCenter(entryArea.getAnchorPane());
 
-        // Delete Area Bauen
+        // Delete Area
         DeleteArea deleteArea = new DeleteArea();
         root.setBottom(deleteArea.getPane());
 

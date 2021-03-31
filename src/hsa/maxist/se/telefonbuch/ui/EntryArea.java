@@ -24,6 +24,9 @@ public class EntryArea {
 
         Callback<TableColumn<TelefonEntry, String>, TableCell<TelefonEntry, String>> cellFactory = p -> new EditingCell();
 
+        TableColumn<TelefonEntry, Integer> iDCol = new TableColumn<>("Nr.");
+        iDCol.setOnEditCommit(null);
+
         TableColumn<TelefonEntry, String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         lastNameCol.setCellFactory(cellFactory);
@@ -34,11 +37,12 @@ public class EntryArea {
         firstNameCol.setCellFactory(cellFactory);
         firstNameCol.setOnEditCommit(t -> getCurrentRow(t).setFirstName(t.getNewValue()));
 
-        TableColumn<TelefonEntry, String> emailCol = new TableColumn<>("Number");
+        TableColumn<TelefonEntry, String> emailCol = new TableColumn<>("Phone Number");
         emailCol.setCellValueFactory(new PropertyValueFactory<>("number"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
+        tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
         tableView.getColumns().add(lastNameCol);
         tableView.getColumns().add(emailCol);
