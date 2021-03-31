@@ -62,7 +62,17 @@ public class TelefonBook implements Iterable<TelefonEntry>{
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     String[] lines = line.split(regex);
+
+                    // if not empty
                     if(lines.length != 0) {
+
+                        // make actually empty cells out of read empty signs
+                        for(int i = 0; i < lines.length; i++) {
+                            if(lines[i].equals(empty))
+                                lines[i] = "";
+                        }
+
+                        // create Entry
                         TelefonEntry telefonEntry = new TelefonEntry();
                         telefonEntry.setFirstName(lines[0]);
                         telefonEntry.setLastName(lines[1]);
@@ -91,19 +101,19 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
         for (TelefonEntry entry : telefonNumbers) {
             // First Name
-            if(entry.getFirstName() == null || entry.getFirstName().equals(TelefonEntry.empty) || entry.getFirstName().equals(empty))
+            if(entry.getFirstName() == null || entry.getFirstName().equals("") || entry.getFirstName().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getFirstName());
             content.append(regex);
 
             // Last Name
-            if(entry.getLastName() == null || entry.getLastName().equals(TelefonEntry.empty) || entry.getLastName().equals(empty))
+            if(entry.getLastName() == null || entry.getLastName().equals("") || entry.getLastName().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getLastName());
             content.append(regex);
 
             // Number
-            if (entry.getNumber() == null || entry.getNumber().equals(TelefonEntry.empty) || entry.getNumber().equals(empty))
+            if (entry.getNumber() == null || entry.getNumber().equals("") || entry.getNumber().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getNumber());
 
