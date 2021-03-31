@@ -1,5 +1,6 @@
 package hsa.maxist.se.telefonbuch.data;
 
+import hsa.maxist.se.telefonbuch.ui.EntryArea;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -60,7 +61,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         StringBuilder content = new StringBuilder();
 
         for (TelefonEntry entry : telefonNumbers) {
-            if(entry.getFirstName().equals("Click to edit")) {
+            if(entry.getFirstName().equals(TelefonEntry.empty)) {
                 content.append('\n');
                 continue;
             }

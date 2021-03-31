@@ -14,10 +14,7 @@ public class DeleteArea {
 
         Button deleteButon = new Button("Delete");
         deleteButon.onActionProperty().setValue(onDelete);
-//        ObservableList<TelefonEntry> selected = entryArea.getSelectedEntries();
-//        for(TelefonEntry item : selected) {
-//            telefonBook.getTelefonNumbers().remove(item);
-//        }
+
         AnchorPane.setTopAnchor(deleteButon, 10.0);
         AnchorPane.setRightAnchor(deleteButon, 10.0);
         AnchorPane.setBottomAnchor(deleteButon, 10.0);

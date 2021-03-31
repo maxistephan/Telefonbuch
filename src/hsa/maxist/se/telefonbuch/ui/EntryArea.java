@@ -19,6 +19,7 @@ public class EntryArea {
 
     public EntryArea(ObservableList<TelefonEntry> telefonEntries) {
         tableView = new TableView<>();
+
         AnchorPane.setLeftAnchor(tableView, 10.0);
         AnchorPane.setRightAnchor(tableView, 10.0);
         AnchorPane.setTopAnchor(tableView, 0.0);
@@ -42,9 +43,9 @@ public class EntryArea {
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
-        TableColumn<TelefonEntry, Integer> iDCol = new TableColumn<>("Nr.");
+        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
         iDCol.setCellFactory(col -> {
-            TableCell<TelefonEntry, Integer> indexCell = new TableCell<>();
+            TableCell<TelefonEntry, String> indexCell = new TableCell<>();
             ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
             ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
                 TableRow<TelefonEntry> row = rowProperty.get();
