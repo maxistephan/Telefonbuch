@@ -26,12 +26,12 @@ public class Main extends Application {
 
         BorderPane root = new BorderPane();
 
-        SearchArea searchArea = new SearchArea();
-        root.setTop(searchArea.getPane());
-
         // Telefon Buch instanzieren
         TelefonBook telefonBook = new TelefonBook();
         TelefonEntry peter = new TelefonEntry();
+
+        SearchArea searchArea = new SearchArea();
+        root.setTop(searchArea.getPane());
 
         // Nummern hinzufügen
         telefonBook.getTelefonNumbers().add(peter);
@@ -46,7 +46,7 @@ public class Main extends Application {
         root.setCenter(entryArea.getAnchorPane());
 
         // Delete Area
-        DeleteArea deleteArea = new DeleteArea();
+        DeleteArea deleteArea = new DeleteArea(entryArea, telefonBook);
         root.setBottom(deleteArea.getPane());
 
         // Fenster Anzeigen

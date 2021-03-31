@@ -1,11 +1,6 @@
 package hsa.maxist.se.telefonbuch.ui;
 
 import hsa.maxist.se.telefonbuch.data.TelefonEntry;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -44,29 +39,12 @@ public class EntryArea {
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
-        TableColumn<TelefonEntry, Integer> iDCol = new TableColumn<>("Nr.");
-        iDCol.setCellFactory(col -> {
-            TableCell<TelefonEntry, Integer> indexCell = new TableCell<>();
-            ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
-            ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
-                TableRow<TelefonEntry> row = rowProperty.get();
-                if (row != null) {
-                    int rowIndex = row.getIndex();
-                    if (rowIndex < row.getTableView().getItems().size()) {
-                        return Integer.toString(rowIndex);
-                    }
-                }
-                return null;
-            }, rowProperty);
-            indexCell.textProperty().bind(rowBinding);
-            return indexCell;
-        });
 
-        tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
         tableView.getColumns().add(lastNameCol);
         tableView.getColumns().add(emailCol);
         tableView.setItems(telefonEntries);
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.setEditable(true);
     }
 
@@ -151,5 +129,4 @@ public class EntryArea {
     private static TelefonEntry getCurrentRow(TableColumn.CellEditEvent<TelefonEntry, String> t) {
         return t.getTableView().getItems().get(t.getTablePosition().getRow());
     }
-
 }

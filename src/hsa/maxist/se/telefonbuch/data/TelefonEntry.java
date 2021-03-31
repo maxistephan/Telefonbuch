@@ -2,14 +2,10 @@ package hsa.maxist.se.telefonbuch.data;
 
 public class TelefonEntry {
 
-    public static int numOfEntries;
 
-    private int iD;
     private String lastName;
     private String firstName;
     private String number;
-
-    public TelefonEntry() { iD = ++numOfEntries;}
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
@@ -35,10 +31,8 @@ public class TelefonEntry {
         return number;
     }
 
-    public int getiD() { return iD; }
-
     @Override
-    public void finalize() {
-        numOfEntries--;
+    public String toString() {
+        return firstName + " " + lastName + " " + number;
     }
 }
