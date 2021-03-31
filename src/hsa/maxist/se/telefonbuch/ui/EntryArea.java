@@ -1,9 +1,6 @@
 package hsa.maxist.se.telefonbuch.ui;
 
 import hsa.maxist.se.telefonbuch.data.TelefonEntry;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -43,25 +40,26 @@ public class EntryArea {
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
-        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
-        iDCol.setCellFactory(col -> {
-            TableCell<TelefonEntry, String> indexCell = new TableCell<>();
-            ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
-            ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
-                TableRow<TelefonEntry> row = rowProperty.get();
-                if (row != null) {
-                    int rowIndex = row.getIndex();
-                    if (rowIndex < row.getTableView().getItems().size()) {
-                        return Integer.toString(rowIndex);
-                    }
-                }
-                return null;
-            }, rowProperty);
-            indexCell.textProperty().bind(rowBinding);
-            return indexCell;
-        });
-
-        tableView.getColumns().add(iDCol);
+//        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
+//        iDCol.setCellFactory(col -> {
+//            TableCell<TelefonEntry, String> indexCell = new TableCell<>();
+//            ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
+//            ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
+//                TableRow<TelefonEntry> row = rowProperty.get();
+//                if (row != null) {
+//                    int rowIndex = row.getIndex();
+//                    System.out.println("chello");
+//                    if (rowIndex < row.getTableView().getItems().size()) {
+//                        return Integer.toString(rowIndex);
+//                    }
+//                }
+//                return null;
+//            }, rowProperty);
+//            indexCell.textProperty().bind(rowBinding);
+//            return indexCell;
+//        });
+//
+//        tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
         tableView.getColumns().add(lastNameCol);
         tableView.getColumns().add(emailCol);
