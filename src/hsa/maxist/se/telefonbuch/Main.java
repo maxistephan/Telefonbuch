@@ -81,7 +81,7 @@ public class Main extends Application {
             for (TelefonEntry entry : telefonBook) {
                 content.append(entry.getFirstName()).append("    ");
                 content.append(entry.getLastName()).append("    ");
-                content.append(entry.getNumber()).append("\n\n");
+                content.append(entry.getNumber()).append("\n");
             }
 
             try {
