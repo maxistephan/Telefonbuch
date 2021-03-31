@@ -44,12 +44,6 @@ public class EntryArea {
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
-        class NumberedCell extends TableCell {
-            protected void updateItem(Object object, boolean selected) {
-                setText(String.valueOf(getIndex()));
-            }
-        }
-
         TableColumn<TelefonEntry, Integer> iDCol = new TableColumn<>("Nr.");
         iDCol.setCellFactory(col -> {
             TableCell<TelefonEntry, Integer> indexCell = new TableCell<>();
@@ -67,7 +61,6 @@ public class EntryArea {
             indexCell.textProperty().bind(rowBinding);
             return indexCell;
         });
-        iDCol.setOnEditCommit(null);
 
         tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
