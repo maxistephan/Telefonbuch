@@ -95,7 +95,9 @@ public class Main extends Application {
                 FileWriter writer = new FileWriter(savedBook);
                 writer.write(content.toString());
                 writer.close();
+                System.out.println("Content Saved!");
             } catch (IOException ioe) {
+                System.out.println("Something went wrong while saving");
                 ioe.printStackTrace();
             }
         };
