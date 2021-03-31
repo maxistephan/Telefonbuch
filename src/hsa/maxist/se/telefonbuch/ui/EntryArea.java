@@ -40,7 +40,8 @@ public class EntryArea {
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(t -> getCurrentRow(t).setNumber(t.getNewValue()));
 
-//        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
+        TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
+        iDCol.setCellValueFactory(new PropertyValueFactory<TelefonEntry, String>("id"));
 //        iDCol.setCellFactory(col -> {
 //            TableCell<TelefonEntry, String> indexCell = new TableCell<>();
 //            ReadOnlyObjectProperty<TableRow<TelefonEntry>> rowProperty = indexCell.tableRowProperty();
@@ -58,8 +59,8 @@ public class EntryArea {
 //            indexCell.textProperty().bind(rowBinding);
 //            return indexCell;
 //        });
-//
-//        tableView.getColumns().add(iDCol);
+
+        tableView.getColumns().add(iDCol);
         tableView.getColumns().add(firstNameCol);
         tableView.getColumns().add(lastNameCol);
         tableView.getColumns().add(emailCol);

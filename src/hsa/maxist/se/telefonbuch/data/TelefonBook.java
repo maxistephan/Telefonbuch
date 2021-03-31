@@ -27,6 +27,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         for (TelefonEntry item : selected) {
             telefonNumbers.remove(item);
         }
+        update();
     }
 
     public void add(Event event) {
@@ -84,6 +85,13 @@ public class TelefonBook implements Iterable<TelefonEntry>{
             } catch (NoSuchElementException | IllegalStateException e) {
                 System.out.println("Something is wrong with that File");
             }
+    }
+
+    public void update() {
+        for (int i = 0; i < telefonNumbers.size(); i++) {
+            telefonNumbers.get(i).setId(i);
+        }
+        TelefonEntry.numOfInstances = telefonNumbers.size();
     }
 
     public ObservableList<TelefonEntry> getTelefonNumbers(){
