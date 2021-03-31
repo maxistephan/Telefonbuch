@@ -1,7 +1,5 @@
 package hsa.maxist.se.telefonbuch.ui;
 
-import hsa.maxist.se.telefonbuch.data.TelefonEntry;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;

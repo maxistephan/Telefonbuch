@@ -2,7 +2,6 @@ package hsa.maxist.se.telefonbuch.data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,11 +29,11 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         update();
     }
 
-    public void add(Event event) {
+    public void add() {
         telefonNumbers.add(new TelefonEntry());
     }
 
-    public void search(Event event) {
+    public void search() {
 
     }
 
@@ -51,7 +50,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     }
 
     public void load() {
-
         Scanner scanner = null;
         try {
             scanner = new Scanner(savedBook);

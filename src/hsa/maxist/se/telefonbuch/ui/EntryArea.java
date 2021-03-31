@@ -26,7 +26,7 @@ public class EntryArea {
         Callback<TableColumn<TelefonEntry, String>, TableCell<TelefonEntry, String>> cellFactory = p -> new EditingCell();
 
         TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
-        iDCol.setCellValueFactory(new PropertyValueFactory<TelefonEntry, String>("id"));
+        iDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<TelefonEntry, String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));

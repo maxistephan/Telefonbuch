@@ -21,7 +21,7 @@ public class Main extends Application {
         telefonBook.load();
 
         // Search Area
-        SearchArea searchArea = new SearchArea(telefonBook::search);
+        SearchArea searchArea = new SearchArea(event1 -> telefonBook.search());
         root.setTop(searchArea.getPane());
 
         // Entry Area
@@ -31,7 +31,7 @@ public class Main extends Application {
         // Delete Area
         DeleteArea deleteArea = new DeleteArea(
                 onDelete -> telefonBook.delete(entryArea.getSelectedEntries()),
-                telefonBook::add);
+                event -> telefonBook.add());
         root.setBottom(deleteArea.getPane());
 
         // Fenster Einstellen
