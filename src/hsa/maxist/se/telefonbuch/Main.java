@@ -30,7 +30,7 @@ public class Main extends Application {
         TelefonBook telefonBook = new TelefonBook();
         TelefonEntry peter = new TelefonEntry();
 
-        SearchArea searchArea = new SearchArea();
+        SearchArea searchArea = new SearchArea(telefonBook::search);
         root.setTop(searchArea.getPane());
 
         // Nummern hinzufügen
@@ -46,7 +46,9 @@ public class Main extends Application {
         root.setCenter(entryArea.getAnchorPane());
 
         // Delete Area
-        DeleteArea deleteArea = new DeleteArea(entryArea, telefonBook);
+        DeleteArea deleteArea = new DeleteArea(
+                onDelete -> telefonBook.delete(entryArea.getSelectedEntries()),
+                telefonBook::add);
         root.setBottom(deleteArea.getPane());
 
         // Fenster Einstellen
@@ -79,7 +81,10 @@ public class Main extends Application {
             StringBuilder content = new StringBuilder();
 
             for (TelefonEntry entry : telefonBook) {
-                if(entry.getFirstName().equals("Click to edit")) content.append('\n');
+                if(entry.getFirstName().equals("Click to edit")) {
+                    content.append('\n');
+                    continue;
+                }
                 content.append(entry.getFirstName()).append("    ");
                 content.append(entry.getLastName()).append("    ");
                 content.append(entry.getNumber()).append("\n");

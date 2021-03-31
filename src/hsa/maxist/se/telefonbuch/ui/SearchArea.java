@@ -15,7 +15,7 @@ public class SearchArea {
     private final TextField searchTextField = new TextField();
     private final Button searchButton = new Button("Search");
 
-    public SearchArea() {
+    public SearchArea(EventHandler<ActionEvent> onSearch) {
         AnchorPane.setLeftAnchor(searchTextField, 10.0);
         AnchorPane.setTopAnchor(searchTextField, 10.0);
         AnchorPane.setRightAnchor(searchTextField, 90.0);
@@ -25,9 +25,7 @@ public class SearchArea {
         AnchorPane.setRightAnchor(searchButton, 10.0);
         AnchorPane.setBottomAnchor(searchButton, 10.0);
 
-        searchButton.onActionProperty().setValue(actionEvent -> {
-            
-        });
+        searchButton.onActionProperty().setValue(onSearch);
 
         anchorPane.getChildren().addAll(searchTextField, searchButton);
     }

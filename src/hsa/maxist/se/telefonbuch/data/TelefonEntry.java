@@ -2,13 +2,14 @@ package hsa.maxist.se.telefonbuch.data;
 
 public class TelefonEntry {
 
+    public static final String empty = "<empty>";
 
     private String lastName;
     private String firstName;
     private String number;
 
     public TelefonEntry() {
-        firstName = "Click to edit";
+        firstName = empty;
     }
 
     public void setLastName(String lastName) {
