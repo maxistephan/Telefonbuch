@@ -1,9 +1,10 @@
-Alan    Turing    01042/5557328
-Albert    Einstein    09033/5558137
-Alexander G.    Bell    +44 131/364446
-Antonio    Meucci    +39 1337/80159
-Barack    Obama    773-365-9687—I
-Charles A.    Cheever    +1 917/445219
-Evelyn    Mosby    0821/718854
-Paul    ###    0175/713663
-Peter    Lustig    0159/377698
+Alan {4}Turing {4}01042/5557328
+Albert {4}Einstein {4}09033/5558137
+Alexander G. {4}Bell {4}+44 131/364446
+Antonio {4}Meucci {4}+39 1337/80159
+Barack {4}Obama {4}773-365-9687—I
+Charles A. {4}Cheever {4}+1 917/445219
+Evelyn {4}Mosby {4}0821/718854
+Paul {4}### {4}0175/713663
+### {4}### {4}###
+Test {4}Durchlauf {4}###

@@ -13,7 +13,6 @@ public class SearchArea {
     private final TextField searchTextField = new TextField("Search here");
     private final Button searchButton = new Button("Search");
 
-
     public SearchArea() {
         searchTextField.onMouseClickedProperty().setValue(mouseEvent -> searchTextField.clear());
 
