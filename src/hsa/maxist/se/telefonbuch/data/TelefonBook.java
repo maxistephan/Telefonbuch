@@ -14,7 +14,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
     private final File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
-    private final String regex = " {4}";
+    private final String regex = "    ";
     private final String empty = "###";
 
     private boolean isSearching = false;
