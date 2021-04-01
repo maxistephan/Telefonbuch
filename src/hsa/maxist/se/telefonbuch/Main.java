@@ -38,6 +38,7 @@ public class Main extends Application {
         // Fenster Einstellen
         primaryStage.setTitle("Telefon Buch");
         primaryStage.setScene(new Scene(root, 330, 275));
+
         // save on close
         primaryStage.setOnCloseRequest(windowEvent -> telefonBook.save());
         primaryStage.show();

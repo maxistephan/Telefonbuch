@@ -24,11 +24,14 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     }
 
     public void delete(ObservableList<TelefonEntry> selected){
-        for (TelefonEntry item : selected) {
+        // Copy to ArrayList
+        ArrayList<TelefonEntry> selectedEntries = new ArrayList<>(selected);
+        for (TelefonEntry item : selectedEntries) {
             telefonNumbers.remove(item);
             if(isSearching)
                 searchResults.remove(item);
         }
+        // update phonebook
         update();
     }
 
