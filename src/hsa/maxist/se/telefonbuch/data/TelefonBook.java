@@ -13,7 +13,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
-    private final File savedBook = new File("src/hsa/maxist/se/telefonbuch/resources/data.txt");
+    private final String savedBookLink = "src/hsa/maxist/se/telefonbuch/resources/data.txt";
     private final String regex = "    ";
     private final String empty = "###";
 
@@ -70,7 +70,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     public void save() {
         try {
             // Content schreiben
-            FileWriter writer = new FileWriter(savedBook);
+            FileWriter writer = new FileWriter(savedBookLink);
             writer.write(toString());
             writer.close();
             System.out.println("Content Saved!");
@@ -81,10 +81,16 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     public void load() {
         Scanner scanner = null;
+        File savedBook = new File(savedBookLink);
         try {
             scanner = new Scanner(savedBook);
         } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println("Couldn't load the requested file.");
+            try {
+                savedBook.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Something went wrong loading the contact list");
+                return;
+            }
         }
         if(scanner != null)
             try {
