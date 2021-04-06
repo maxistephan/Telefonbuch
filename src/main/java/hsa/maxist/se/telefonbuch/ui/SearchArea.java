@@ -33,7 +33,8 @@ public class SearchArea {
     }
 
     public void setButtonAction(EventHandler<ActionEvent> onClick) {
-        searchButton.onActionProperty().setValue(onClick);
+        searchButton.setOnAction(onClick);
+        searchTextField.setOnAction(onClick);
     }
 
     public Node getPane() {

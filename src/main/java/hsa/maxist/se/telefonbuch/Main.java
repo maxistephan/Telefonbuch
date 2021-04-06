@@ -32,7 +32,8 @@ public class Main extends Application {
         // Delete Area
         DeleteArea deleteArea = new DeleteArea(
                 onDelete -> telefonBook.delete(entryArea.getSelectedEntries()),
-                event -> telefonBook.add());
+                onAdd -> telefonBook.add(),
+                onSave -> telefonBook.save());
         root.setBottom(deleteArea.getPane());
 
         // Fenster Einstellen

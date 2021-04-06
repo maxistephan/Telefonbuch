@@ -1,21 +1,27 @@
 package hsa.maxist.se.telefonbuch.data;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
-    private final String savedBookLink = "src/hsa/maxist/se/telefonbuch/resources/data.txt";
-    private final String regex = "    ";
-    private final String empty = "###";
+    private final Path test = FileSystems.getDefault().getPath("src", "main", "resources", "test.json");
+    private final Path savedBookPath = FileSystems.getDefault().getPath("src", "main", "resources", "data.json");
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final String empty = "<empty>";
 
     private boolean isSearching = false;
 
@@ -68,57 +74,58 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     }
 
     public void save() {
-        try {
-            // Content schreiben
-            FileWriter writer = new FileWriter(savedBookLink);
-            writer.write(toString());
-            writer.close();
-            System.out.println("Content Saved!");
-        } catch (IOException ioe) {
-            System.out.println("Something went wrong while saving");
+        JsonFactory factory = new JsonFactory();
+        try(OutputStream os = Files.newOutputStream(savedBookPath);
+            JsonGenerator jg = factory.createGenerator(os)) {
+
+            jg.writeStartArray();
+
+            for(TelefonEntry entry : telefonNumbers) {
+                jg.writeStartObject();
+                jg.writeNumberField("id", entry.getId());
+                jg.writeObjectFieldStart("name");
+                jg.writeStringField("first", entry.getFirstName());
+                jg.writeStringField("last", entry.getLastName());
+                jg.writeEndObject();
+                jg.writeStringField("number", entry.getNumber());
+                jg.writeEndObject();
+            }
+            jg.writeEndArray();
+
+        } catch ( IOException e) {
+            e. printStackTrace () ;
         }
+
     }
 
     public void load() {
-        Scanner scanner = null;
-        File savedBook = new File(savedBookLink);
-        try {
-            scanner = new Scanner(savedBook);
-        } catch (FileNotFoundException fileNotFoundException) {
-            try {
-                savedBook.createNewFile();
-            } catch (IOException e) {
-                System.out.println("Something went wrong loading the contact list");
-                return;
-            }
-        }
-        if(scanner != null)
-            try {
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
-                    String[] lines = line.split(regex);
+        try (InputStream is = Files.newInputStream(savedBookPath)) {
 
-                    // if not empty
-                    if(lines.length != 0) {
+            JsonNode rootArray = mapper.readTree(is);
 
-                        // make actually empty cells out of empty signs
-                        for(int i = 0; i < lines.length; i++) {
-                            if(lines[i].equals(empty))
-                                lines[i] = "";
-                        }
+            for (JsonNode root : rootArray) {
 
-                        // create Entry
-                        TelefonEntry telefonEntry = new TelefonEntry();
-                        telefonEntry.setFirstName(lines[0]);
-                        telefonEntry.setLastName(lines[1]);
-                        telefonEntry.setNumber(lines[2]);
-                        telefonNumbers.add(telefonEntry);
-                    }
+                TelefonEntry entry = new TelefonEntry();
+
+                // Get id
+                entry.setId(root.path("id").asLong());
+
+                // Get Name
+                JsonNode nameNode = root.path("name");
+                if (!nameNode.isMissingNode()) {        // if "name" node is exist
+                    entry.setFirstName(nameNode.path("first").asText());
+                    entry.setLastName(nameNode.path("last").asText());
                 }
 
-            } catch (NoSuchElementException | IllegalStateException e) {
-                System.out.println("Something is wrong with that File");
+                // Get Number
+                entry.setNumber( root.path("number").asText());
+                telefonNumbers.add(entry);
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void update() {
@@ -146,13 +153,13 @@ public class TelefonBook implements Iterable<TelefonEntry>{
             if(entry.getFirstName().equals("") || entry.getFirstName().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getFirstName());
-            content.append(regex);
+            content.append('\t');
 
             // Last Name
             if(entry.getLastName().equals("") || entry.getLastName().equals(TelefonEntry.empty))
                 content.append(empty);
             else content.append(entry.getLastName());
-            content.append(regex);
+            content.append('\t');
 
             // Number
             if (entry.getNumber().equals("") || entry.getNumber().equals(TelefonEntry.empty))

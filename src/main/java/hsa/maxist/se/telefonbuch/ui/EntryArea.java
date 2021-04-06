@@ -28,15 +28,15 @@ public class EntryArea {
         TableColumn<TelefonEntry, String> iDCol = new TableColumn<>("Nr.");
         iDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn<TelefonEntry, String> lastNameCol = new TableColumn<>("Last Name");
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        lastNameCol.setCellFactory(cellFactory);
-        lastNameCol.setOnEditCommit(t -> getCurrentRow(t).setLastName(t.getNewValue()));
-
         TableColumn<TelefonEntry, String> firstNameCol = new TableColumn<>("First Name");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         firstNameCol.setCellFactory(cellFactory);
         firstNameCol.setOnEditCommit(t -> getCurrentRow(t).setFirstName(t.getNewValue()));
+
+        TableColumn<TelefonEntry, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setCellFactory(cellFactory);
+        lastNameCol.setOnEditCommit(t -> getCurrentRow(t).setLastName(t.getNewValue()));
 
         TableColumn<TelefonEntry, String> emailCol = new TableColumn<>("Phone Number");
         emailCol.setCellValueFactory(new PropertyValueFactory<>("number"));

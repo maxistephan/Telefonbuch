@@ -4,7 +4,7 @@ public class TelefonEntry {
 
     public static final String empty = "<empty>";
 
-    private int id;
+    private long id;
     private String lastName;
     private String firstName;
     private String number;
@@ -29,7 +29,7 @@ public class TelefonEntry {
         this.number = number;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,7 +45,7 @@ public class TelefonEntry {
         return number;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
