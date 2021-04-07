@@ -18,7 +18,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
-    private final Path test = FileSystems.getDefault().getPath("src", "main", "resources", "test.json");
     private final Path savedBookPath = FileSystems.getDefault().getPath("src", "main", "resources", "data.json");
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final String empty = "<empty>";
