@@ -18,9 +18,9 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
-    private final Path savedBookPath = FileSystems.getDefault().getPath("src", "main", "resources", "data.json");
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private static final String empty = "<empty>";
+    private static final Path SAVED_BOOK_PATH = FileSystems.getDefault().getPath("src", "main", "resources", "data.json");
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String EMPTY = "<empty>";
 
     private boolean isSearching = false;
 
@@ -74,7 +74,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     public void save() {
         JsonFactory factory = new JsonFactory();
-        try(OutputStream os = Files.newOutputStream(savedBookPath);
+        try(OutputStream os = Files.newOutputStream(SAVED_BOOK_PATH);
             JsonGenerator jg = factory.createGenerator(os)) {
 
             jg.writeStartArray();
@@ -98,9 +98,9 @@ public class TelefonBook implements Iterable<TelefonEntry>{
     }
 
     public void load() {
-        try (InputStream is = Files.newInputStream(savedBookPath)) {
+        try (InputStream is = Files.newInputStream(SAVED_BOOK_PATH)) {
 
-            JsonNode rootArray = mapper.readTree(is);
+            JsonNode rootArray = MAPPER.readTree(is);
 
             for (JsonNode root : rootArray) {
 
@@ -150,19 +150,19 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         for (TelefonEntry entry : telefonNumbers) {
             // First Name
             if(entry.getFirstName().equals("") || entry.getFirstName().equals(TelefonEntry.empty))
-                content.append(empty);
+                content.append(EMPTY);
             else content.append(entry.getFirstName());
             content.append('\t');
 
             // Last Name
             if(entry.getLastName().equals("") || entry.getLastName().equals(TelefonEntry.empty))
-                content.append(empty);
+                content.append(EMPTY);
             else content.append(entry.getLastName());
             content.append('\t');
 
             // Number
             if (entry.getNumber().equals("") || entry.getNumber().equals(TelefonEntry.empty))
-                content.append(empty);
+                content.append(EMPTY);
             else content.append(entry.getNumber());
 
             // New Line
