@@ -18,7 +18,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
-    private static final Path SAVED_BOOK_PATH = FileSystems.getDefault().getPath("src", "main", "resources", "data.json");
+    private static final Path SAVED_BOOK_PATH = FileSystems.getDefault().getPath("src", "main", "resources", "books/data.json");
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String EMPTY = "<empty>";
 
@@ -72,59 +72,62 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         return searchResults;
     }
 
-    public void save() {
-        JsonFactory factory = new JsonFactory();
-        try(OutputStream os = Files.newOutputStream(SAVED_BOOK_PATH);
-            JsonGenerator jg = factory.createGenerator(os)) {
+    public void save(Path path) {
+        if(confirmedPath(path)) {
+            JsonFactory factory = new JsonFactory();
+            try (OutputStream os = Files.newOutputStream(path);
+                 JsonGenerator jg = factory.createGenerator(os)) {
 
-            jg.writeStartArray();
+                jg.writeStartArray();
 
-            for(TelefonEntry entry : telefonNumbers) {
-                jg.writeStartObject();
-                jg.writeNumberField("id", entry.getId());
-                jg.writeObjectFieldStart("name");
-                jg.writeStringField("first", entry.getFirstName());
-                jg.writeStringField("last", entry.getLastName());
-                jg.writeEndObject();
-                jg.writeStringField("number", entry.getNumber());
-                jg.writeEndObject();
+                for (TelefonEntry entry : telefonNumbers) {
+                    jg.writeStartObject();
+                    jg.writeNumberField("id", entry.getId());
+                    jg.writeObjectFieldStart("name");
+                    jg.writeStringField("first", entry.getFirstName());
+                    jg.writeStringField("last", entry.getLastName());
+                    jg.writeEndObject();
+                    jg.writeStringField("number", entry.getNumber());
+                    jg.writeEndObject();
+                }
+                jg.writeEndArray();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            jg.writeEndArray();
-
-        } catch ( IOException e) {
-            e. printStackTrace () ;
         }
 
     }
 
-    public void load() {
-        try (InputStream is = Files.newInputStream(SAVED_BOOK_PATH)) {
+    public void load(Path path) {
+        if(confirmedPath(path)) {
+            try (InputStream is = Files.newInputStream(path)) {
 
-            JsonNode rootArray = MAPPER.readTree(is);
+                JsonNode rootArray = MAPPER.readTree(is);
 
-            for (JsonNode root : rootArray) {
+                for (JsonNode root : rootArray) {
 
-                TelefonEntry entry = new TelefonEntry();
+                    TelefonEntry entry = new TelefonEntry();
 
-                // Get id
-                entry.setId(root.path("id").asLong());
+                    // Get id
+                    entry.setId(root.path("id").asLong());
 
-                // Get Name
-                JsonNode nameNode = root.path("name");
-                if (!nameNode.isMissingNode()) {        // if "name" node is exist
-                    entry.setFirstName(nameNode.path("first").asText());
-                    entry.setLastName(nameNode.path("last").asText());
+                    // Get Name
+                    JsonNode nameNode = root.path("name");
+                    if (!nameNode.isMissingNode()) {        // if "name" node is exist
+                        entry.setFirstName(nameNode.path("first").asText());
+                        entry.setLastName(nameNode.path("last").asText());
+                    }
+
+                    // Get Number
+                    entry.setNumber(root.path("number").asText());
+                    telefonNumbers.add(entry);
                 }
 
-                // Get Number
-                entry.setNumber( root.path("number").asText());
-                telefonNumbers.add(entry);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 
     public void update() {
@@ -169,5 +172,17 @@ public class TelefonBook implements Iterable<TelefonEntry>{
             content.append('\n');
         }
         return content.toString();
+    }
+
+    private boolean confirmedPath(Path filepath) {
+        File f = new File(String.valueOf(filepath));
+        try {
+            if(f.exists())
+                return true;
+            return f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

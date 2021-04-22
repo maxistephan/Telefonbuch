@@ -10,7 +10,7 @@ public class DeleteArea {
 
     AnchorPane anchorPane = new AnchorPane();
 
-    public DeleteArea(EventHandler<ActionEvent> onDelete, EventHandler<ActionEvent> onAdd, EventHandler<ActionEvent> onSave) {
+    public DeleteArea(EventHandler<ActionEvent> onDelete, EventHandler<ActionEvent> onAdd) {
 
         // <Delete> Button
         Button deleteButon = new Button("Delete");
@@ -28,15 +28,7 @@ public class DeleteArea {
         AnchorPane.setTopAnchor(addButton, 10.0);
         AnchorPane.setBottomAnchor(addButton, 10.0);
 
-        //<Save> Button
-        Button saveButton = new Button("Save");
-        saveButton.onActionProperty().setValue(onSave);
-
-        AnchorPane.setLeftAnchor(saveButton, 40.0);
-        AnchorPane.setTopAnchor(saveButton, 10.0);
-        AnchorPane.setBottomAnchor(saveButton, 10.0);
-
-        anchorPane.getChildren().addAll(deleteButon, addButton, saveButton);
+        anchorPane.getChildren().addAll(deleteButon, addButton);
     }
 
     public Node getPane() {
