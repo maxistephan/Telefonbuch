@@ -8,7 +8,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        BookStage frame = new BookStage("phonebook");
+        BookStage frame = new BookStage("MyEntries");
         frame.show();
     }
 

@@ -1,5 +1,6 @@
 package hsa.maxist.se.telefonbuch.ui.menu;
 
+import hsa.maxist.se.telefonbuch.ui.BookStage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -11,7 +12,7 @@ public class NewWindow extends Stage {
 
     private final TextField fileName = new TextField("enter name");
 
-    public NewWindow() {
+    public NewWindow(Stage currentStage) {
 
         // --Panes
         AnchorPane anchorPane = new AnchorPane();
@@ -27,12 +28,12 @@ public class NewWindow extends Stage {
         AnchorPane.setTopAnchor(fileName, 10.0);
         AnchorPane.setLeftAnchor(fileName, 10.0);
         AnchorPane.setRightAnchor(fileName, 10.0);
+        fileName.onActionProperty().setValue(t -> buttonAction(currentStage));
 
         // --Button
         Button create = new Button("Create");
-        create.setOnAction(t -> {
-            System.out.println("New");
-        });
+        create.setOnAction(t -> buttonAction(currentStage));
+
         AnchorPane.setBottomAnchor(create, 10.0);
         AnchorPane.setLeftAnchor(create, 80.0);
         AnchorPane.setRightAnchor(create, 80.0);
@@ -42,6 +43,19 @@ public class NewWindow extends Stage {
 
         // --Show
         show();
+    }
+
+    private void buttonAction(Stage currentStage) {
+        String fileNameText = fileName.getText().strip();
+        String[] splittedName = fileNameText.split("\\s");
+        StringBuilder newFileName = new StringBuilder();
+        for(String s : splittedName) {
+            newFileName.append(s);
+        }
+
+        new BookStage(newFileName.toString()).show();
+        currentStage.close();
+        this.close();
     }
 
     public String getText() {

@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.*;
-import java.nio.file.FileSystems;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
     private final ObservableList<TelefonEntry> telefonNumbers;
     private ObservableList<TelefonEntry> searchResults;
-    private static final Path SAVED_BOOK_PATH = FileSystems.getDefault().getPath("src", "main", "resources", "books/data.json");
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String EMPTY = "<empty>";
 
@@ -36,8 +37,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
             if(isSearching)
                 searchResults.remove(item);
         }
-        // update phonebook
-        update();
     }
 
     public void add() {
@@ -82,7 +81,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
 
                 for (TelefonEntry entry : telefonNumbers) {
                     jg.writeStartObject();
-                    jg.writeNumberField("id", entry.getId());
                     jg.writeObjectFieldStart("name");
                     jg.writeStringField("first", entry.getFirstName());
                     jg.writeStringField("last", entry.getLastName());
@@ -103,14 +101,12 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         if(confirmedPath(path)) {
             try (InputStream is = Files.newInputStream(path)) {
 
-                JsonNode rootArray = MAPPER.readTree(is);
+                System.out.println(path);
 
+                JsonNode rootArray = MAPPER.readTree(is);
                 for (JsonNode root : rootArray) {
 
                     TelefonEntry entry = new TelefonEntry();
-
-                    // Get id
-                    entry.setId(root.path("id").asLong());
 
                     // Get Name
                     JsonNode nameNode = root.path("name");
@@ -128,13 +124,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
                 e.printStackTrace();
             }
         }
-    }
-
-    public void update() {
-        for (int i = 0; i < telefonNumbers.size(); i++) {
-            telefonNumbers.get(i).setId(i);
-        }
-        TelefonEntry.numOfInstances = telefonNumbers.size();
     }
 
     public ObservableList<TelefonEntry> getTelefonNumbers(){

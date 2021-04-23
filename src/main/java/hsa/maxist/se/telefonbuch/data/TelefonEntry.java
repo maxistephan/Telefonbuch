@@ -4,15 +4,12 @@ public class TelefonEntry {
 
     public static final String empty = "<empty>";
 
-    private long id;
     private String lastName;
     private String firstName;
     private String number;
-    public static int numOfInstances;
 
     public TelefonEntry() {
         firstName = empty;
-        id = numOfInstances++;
         lastName = "";
         number = "";
     }
@@ -29,10 +26,6 @@ public class TelefonEntry {
         this.number = number;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getLastName() {
         return lastName;
     }
@@ -43,10 +36,6 @@ public class TelefonEntry {
 
     public String getNumber() {
         return number;
-    }
-
-    public long getId() {
-        return id;
     }
 
     @Override

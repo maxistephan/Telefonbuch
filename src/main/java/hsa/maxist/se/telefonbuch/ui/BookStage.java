@@ -1,8 +1,8 @@
 package hsa.maxist.se.telefonbuch.ui;
 
 import hsa.maxist.se.telefonbuch.data.TelefonBook;
+import hsa.maxist.se.telefonbuch.ui.menu.FileListWindow;
 import hsa.maxist.se.telefonbuch.ui.menu.NewWindow;
-import hsa.maxist.se.telefonbuch.ui.menu.OpenWindow;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -19,11 +19,10 @@ import java.util.Arrays;
 
 public class BookStage extends Stage {
 
-    private final TelefonMenu menuBar;
     public static final String[] pathToBooks = {"main", "resources", "books"};
     public static final String first = "src";
-    private Path filepath;
-    private TelefonBook telefonBook;
+    private final Path filepath;
+    private final TelefonBook telefonBook;
 
     public BookStage(String name) {
         BorderPane root = new BorderPane();
@@ -38,11 +37,11 @@ public class BookStage extends Stage {
         filepath = FileSystems.getDefault().getPath(first, filepathString);
 
         // --Telefon Buch instanzieren
-        TelefonBook telefonBook = new TelefonBook();
+        telefonBook = new TelefonBook();
         telefonBook.load(filepath);
 
         // --Menu Bar
-        menuBar = new TelefonMenu(
+        TelefonMenu menuBar = new TelefonMenu(
                 onSave -> telefonBook.save(filepath)
         );
 
@@ -75,17 +74,21 @@ public class BookStage extends Stage {
             Menu fileMenu = new Menu("File");
             //new
             MenuItem newFile = new MenuItem("New");
-            newFile.onActionProperty().setValue(t -> new NewWindow());
+            newFile.onActionProperty().setValue(t ->
+                    new NewWindow(BookStage.this)
+            );
             //open
             MenuItem open = new MenuItem("Open");
-            open.onActionProperty().setValue(t -> new OpenWindow("Open"));
+            open.onActionProperty().setValue(t ->
+                    new FileListWindow("Open", BookStage.this)
+            );
             //save
             MenuItem save = new MenuItem("Save");
             save.onActionProperty().setValue(onSave);
             //import
             MenuItem importItem = new MenuItem("Import");
             importItem.onActionProperty().setValue(t ->
-                    new OpenWindow("Import")
+                    new FileListWindow("Import", BookStage.this)
             );
 
             fileMenu.getItems().addAll(newFile, open, save, importItem);
@@ -95,9 +98,31 @@ public class BookStage extends Stage {
 
             // --View Menu
             Menu viewMenu = new Menu("View");
+            // Fullscreen Toggle
+            MenuItem fullscreenToggle = new MenuItem((
+                    BookStage.this.isFullScreen() ? "Exit" : "Enter") + " Fullscreen");
+            fullscreenToggle.onActionProperty().setValue(t -> {
+                        BookStage.this.setFullScreen(!BookStage.this.isFullScreen());
+                        fullscreenToggle.setText((BookStage.this.isFullScreen()
+                                ? "Exit"
+                                : "Enter")
+                                + " Fullscreen");
+                    }
+            );
+
+            viewMenu.getItems().addAll(fullscreenToggle);
 
             getMenus().addAll(fileMenu, editMenu, viewMenu);
         }
+    }
 
+    public TelefonBook getTelefonBook() {
+        return telefonBook;
+    }
+
+    @Override
+    public void close() {
+        telefonBook.save(filepath);
+        super.close();
     }
 }
