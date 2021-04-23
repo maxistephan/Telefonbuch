@@ -101,8 +101,6 @@ public class TelefonBook implements Iterable<TelefonEntry>{
         if(confirmedPath(path)) {
             try (InputStream is = Files.newInputStream(path)) {
 
-                System.out.println(path);
-
                 JsonNode rootArray = MAPPER.readTree(is);
                 for (JsonNode root : rootArray) {
 

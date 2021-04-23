@@ -57,9 +57,4 @@ public class NewWindow extends Stage {
         currentStage.close();
         this.close();
     }
-
-    public String getText() {
-        return fileName.getText();
-    }
-
 }
