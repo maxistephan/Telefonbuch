@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hsa.maxist.se.telefonbuch.util.FileManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -76,25 +77,25 @@ public class TelefonBook implements Iterable<TelefonEntry>{
             JsonFactory factory = new JsonFactory();
             try (OutputStream os = Files.newOutputStream(path);
                  JsonGenerator jg = factory.createGenerator(os)) {
-
-                jg.writeStartArray();
-
-                for (TelefonEntry entry : telefonNumbers) {
-                    jg.writeStartObject();
-                    jg.writeObjectFieldStart("name");
-                    jg.writeStringField("first", entry.getFirstName());
-                    jg.writeStringField("last", entry.getLastName());
-                    jg.writeEndObject();
-                    jg.writeStringField("number", entry.getNumber());
-                    jg.writeEndObject();
-                }
-                jg.writeEndArray();
+//
+//                jg.writeStartArray();
+//
+//                for (TelefonEntry entry : telefonNumbers) {
+//                    jg.writeStartObject();
+//                    jg.writeObjectFieldStart("name");
+//                    jg.writeStringField("first", entry.getFirstName());
+//                    jg.writeStringField("last", entry.getLastName());
+//                    jg.writeEndObject();
+//                    jg.writeStringField("number", entry.getNumber());
+//                    jg.writeEndObject();
+//                }
+//                jg.writeEndArray();
+                 jg.writeRaw(FileManager.asJSONString(telefonNumbers));
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void load(Path path) {
@@ -102,21 +103,7 @@ public class TelefonBook implements Iterable<TelefonEntry>{
             try (InputStream is = Files.newInputStream(path)) {
 
                 JsonNode rootArray = MAPPER.readTree(is);
-                for (JsonNode root : rootArray) {
-
-                    TelefonEntry entry = new TelefonEntry();
-
-                    // Get Name
-                    JsonNode nameNode = root.path("name");
-                    if (!nameNode.isMissingNode()) {        // if "name" node is exist
-                        entry.setFirstName(nameNode.path("first").asText());
-                        entry.setLastName(nameNode.path("last").asText());
-                    }
-
-                    // Get Number
-                    entry.setNumber(root.path("number").asText());
-                    telefonNumbers.add(entry);
-                }
+                FileManager.extractNodeArray(telefonNumbers, rootArray);
 
             } catch (IOException e) {
                 e.printStackTrace();

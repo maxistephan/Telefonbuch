@@ -1,10 +1,14 @@
 package hsa.maxist.se.telefonbuch.ui;
 
 import hsa.maxist.se.telefonbuch.data.TelefonEntry;
+import hsa.maxist.se.telefonbuch.util.FileManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
@@ -45,9 +49,40 @@ public class EntryArea {
         tableView.getColumns().add(emailCol);
         tableView.setItems(telefonEntries);
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        // --Drag Detected
+        tableView.setOnDragDetected(t ->{
+            Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(
+                    "[" + this + "]"
+                    + FileManager.asJSONString(tableView.getSelectionModel().getSelectedItems())
+            );
+            db.setContent(content);
+
+            t.consume();
+        });
+        // -- Drag Over
+        tableView.setOnDragOver(t -> {
+            if (t.getDragboard().hasString()
+                    && !t.getDragboard().getString().startsWith("[" + this))
+                t.acceptTransferModes(TransferMode.MOVE);
+            t.consume();
+        });
+        // --Drag Dropped
+        tableView.setOnDragDropped(t -> {
+            StringBuilder entries = new StringBuilder(t.getDragboard().getString());
+            for(int i = 0; i < entries.length(); i++) {
+                if(entries.charAt(i) == ']') {
+                    entries.delete(0, i + 1);
+                    break;
+                }
+            }
+
+            telefonEntries.addAll(FileManager.fromJson(entries.toString()));
+            t.consume();
+        });
         tableView.setEditable(true);
     }
-
     public void setItems(List<TelefonEntry> items) {
         if (items instanceof ObservableList) {
             tableView.setItems((ObservableList<TelefonEntry>) items);

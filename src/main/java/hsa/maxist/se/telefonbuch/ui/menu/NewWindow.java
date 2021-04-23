@@ -28,11 +28,11 @@ public class NewWindow extends Stage {
         AnchorPane.setTopAnchor(fileName, 10.0);
         AnchorPane.setLeftAnchor(fileName, 10.0);
         AnchorPane.setRightAnchor(fileName, 10.0);
-        fileName.onActionProperty().setValue(t -> buttonAction(currentStage));
+        fileName.onActionProperty().setValue(t -> buttonAction());
 
         // --Button
         Button create = new Button("Create");
-        create.setOnAction(t -> buttonAction(currentStage));
+        create.setOnAction(t -> buttonAction());
 
         AnchorPane.setBottomAnchor(create, 10.0);
         AnchorPane.setLeftAnchor(create, 80.0);
@@ -45,7 +45,7 @@ public class NewWindow extends Stage {
         show();
     }
 
-    private void buttonAction(Stage currentStage) {
+    private void buttonAction() {
         String fileNameText = fileName.getText().strip();
         String[] splittedName = fileNameText.split("\\s");
         StringBuilder newFileName = new StringBuilder();
@@ -54,7 +54,6 @@ public class NewWindow extends Stage {
         }
 
         new BookStage(newFileName.toString()).show();
-        currentStage.close();
         this.close();
     }
 }

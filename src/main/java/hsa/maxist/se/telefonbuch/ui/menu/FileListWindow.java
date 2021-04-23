@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FileListWindow extends Stage {
@@ -65,11 +66,14 @@ public class FileListWindow extends Stage {
     }
 
     private void Open(String filename, BookStage currentBook) {
-        if(filename.equals(currentBook.getTitle())) {
-            this.close();
-            return;
+        ArrayList<BookStage> currentBooks = BookStage.getInstances();
+
+        for(BookStage bs : currentBooks) {
+            if(bs.getTitle().equals(filename)) {
+                this.close();
+                return;
+            }
         }
-        currentBook.close();
         new BookStage(filename).show();
         this.close();
     }

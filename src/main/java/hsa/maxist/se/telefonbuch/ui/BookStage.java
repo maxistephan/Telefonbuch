@@ -15,12 +15,14 @@ import javafx.stage.Stage;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BookStage extends Stage {
 
     public static final String[] pathToBooks = {"main", "resources", "books"};
     public static final String first = "src";
+    private static final ArrayList<BookStage> instances = new ArrayList<>();
     private final Path filepath;
     private final TelefonBook telefonBook;
 
@@ -61,9 +63,11 @@ public class BookStage extends Stage {
         root.setBottom(deleteArea.getPane());
 
         // --save on close
-        setOnCloseRequest(windowEvent ->
-                telefonBook.save(filepath)
-        );
+        setOnCloseRequest(windowEvent -> {
+            telefonBook.save(filepath);
+            instances.remove(this);
+        });
+        instances.add(this);
     }
 
     private class TelefonMenu extends MenuBar {
@@ -120,9 +124,14 @@ public class BookStage extends Stage {
         return telefonBook;
     }
 
+    public static ArrayList<BookStage> getInstances() {
+        return instances;
+    }
+
     @Override
-    public void close() {
+    public final void close() {
         telefonBook.save(filepath);
+        instances.remove(this);
         super.close();
     }
 }
