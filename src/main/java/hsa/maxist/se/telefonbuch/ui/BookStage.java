@@ -3,6 +3,7 @@ package hsa.maxist.se.telefonbuch.ui;
 import hsa.maxist.se.telefonbuch.data.TelefonBook;
 import hsa.maxist.se.telefonbuch.ui.menu.FileListWindow;
 import hsa.maxist.se.telefonbuch.ui.menu.NewWindow;
+import hsa.maxist.se.telefonbuch.util.FileUtility;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -20,23 +21,31 @@ import java.util.Arrays;
 
 public class BookStage extends Stage {
 
-    public static final String[] pathToBooks = {"main", "resources", "books"};
-    public static final String first = "src";
     private static final ArrayList<BookStage> instances = new ArrayList<>();
     private final Path filepath;
     private final TelefonBook telefonBook;
+    public static final String defaultName = "NewBook";
+
+    public BookStage() {
+        this(defaultName);
+    }
+
+    public BookStage(String name, boolean fullscreen) {
+        this(name);
+        setFullScreen(fullscreen);
+    }
 
     public BookStage(String name) {
         BorderPane root = new BorderPane();
 
         // --Fenster Einstellen
-        setTitle(name);
+        setTitle(name.equals("") ? defaultName : name);
         setScene(new Scene(root, 370, 400));
 
         // --Filepath
-        String[] filepathString = Arrays.copyOf(pathToBooks, pathToBooks.length + 1);
-        filepathString[pathToBooks.length] = getTitle() + ".json";
-        filepath = FileSystems.getDefault().getPath(first, filepathString);
+        String[] filepathString = Arrays.copyOf(FileUtility.pathToBooks, FileUtility.pathToBooks.length + 1);
+        filepathString[FileUtility.pathToBooks.length] = getTitle() + ".json";
+        filepath = FileSystems.getDefault().getPath(FileUtility.first, filepathString);
 
         // --Telefon Buch instanzieren
         telefonBook = new TelefonBook();
@@ -63,10 +72,7 @@ public class BookStage extends Stage {
         root.setBottom(deleteArea.getPane());
 
         // --save on close
-        setOnCloseRequest(windowEvent -> {
-            telefonBook.save(filepath);
-            instances.remove(this);
-        });
+        setOnCloseRequest(windowEvent -> close());
         instances.add(this);
     }
 
@@ -102,17 +108,17 @@ public class BookStage extends Stage {
 
             // --View Menu
             Menu viewMenu = new Menu("View");
+
             // Fullscreen Toggle
             MenuItem fullscreenToggle = new MenuItem((
                     BookStage.this.isFullScreen() ? "Exit" : "Enter") + " Fullscreen");
             fullscreenToggle.onActionProperty().setValue(t -> {
-                        BookStage.this.setFullScreen(!BookStage.this.isFullScreen());
-                        fullscreenToggle.setText((BookStage.this.isFullScreen()
-                                ? "Exit"
-                                : "Enter")
-                                + " Fullscreen");
-                    }
-            );
+                BookStage.this.setFullScreen(!BookStage.this.isFullScreen());
+                fullscreenToggle.setText((BookStage.this.isFullScreen()
+                        ? "Exit"
+                        : "Enter")
+                        + " Fullscreen");
+            });
 
             viewMenu.getItems().addAll(fullscreenToggle);
 

@@ -1,7 +1,7 @@
 package hsa.maxist.se.telefonbuch.ui.menu;
 
 import hsa.maxist.se.telefonbuch.ui.BookStage;
-import hsa.maxist.se.telefonbuch.util.FileManager;
+import hsa.maxist.se.telefonbuch.util.FileUtility;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,7 +33,7 @@ public class FileListWindow extends Stage {
         // --ListBox
         ListView<String> files = new ListView<>();
         files.setItems(
-                FXCollections.observableList(Arrays.asList(FileManager.getFileNames(false)))
+                FXCollections.observableList(Arrays.asList(FileUtility.getFileNames(false)))
         );
         AnchorPane.setTopAnchor(files, 10.0);
         AnchorPane.setLeftAnchor(files, 10.0);
@@ -44,13 +44,13 @@ public class FileListWindow extends Stage {
         // --Button
         Button open = new Button(function);
         open.setOnAction(t -> {
-            String filename = FileManager.getFileName(files.getSelectionModel().getSelectedItem());
-            if(filename.equals(""))
+            String filename = FileUtility.getFileName(files.getSelectionModel().getSelectedItem());
+            if (filename.equals(""))
                 return;
             try {
                 Method m = getClass().getDeclaredMethod(function, String.class, BookStage.class);
                 m.invoke(this, filename, currentBook);
-            } catch(NoSuchMethodException | SecurityException | InvocationTargetException | IllegalAccessException e) {
+            } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
@@ -68,8 +68,8 @@ public class FileListWindow extends Stage {
     private void Open(String filename, BookStage currentBook) {
         ArrayList<BookStage> currentBooks = BookStage.getInstances();
 
-        for(BookStage bs : currentBooks) {
-            if(bs.getTitle().equals(filename)) {
+        for (BookStage bs : currentBooks) {
+            if (bs.getTitle().equals(filename)) {
                 this.close();
                 return;
             }
@@ -79,9 +79,9 @@ public class FileListWindow extends Stage {
     }
 
     private void Import(String filename, BookStage currentBook) {
-        String[] filepathString = Arrays.copyOf(BookStage.pathToBooks, BookStage.pathToBooks.length + 1);
-        filepathString[BookStage.pathToBooks.length] = filename + ".json";
-        Path filepath = FileSystems.getDefault().getPath(BookStage.first, filepathString);
+        String[] filepathString = Arrays.copyOf(FileUtility.pathToBooks, FileUtility.pathToBooks.length + 1);
+        filepathString[FileUtility.pathToBooks.length] = filename + ".json";
+        Path filepath = FileSystems.getDefault().getPath(FileUtility.first, filepathString);
         currentBook.getTelefonBook().load(filepath);
         this.close();
     }

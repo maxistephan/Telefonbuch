@@ -1,14 +1,12 @@
 package hsa.maxist.se.telefonbuch.ui;
 
 import hsa.maxist.se.telefonbuch.data.TelefonEntry;
-import hsa.maxist.se.telefonbuch.util.FileManager;
+import hsa.maxist.se.telefonbuch.util.FileUtility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
@@ -50,39 +48,45 @@ public class EntryArea {
         tableView.setItems(telefonEntries);
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         // --Drag Detected
-        tableView.setOnDragDetected(t ->{
-            Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.putString(
-                    "[" + this + "]"
-                    + FileManager.asJSONString(tableView.getSelectionModel().getSelectedItems())
-            );
-            db.setContent(content);
-
-            t.consume();
-        });
+        tableView.setOnDragDetected(this::onDrag);
         // -- Drag Over
-        tableView.setOnDragOver(t -> {
-            if (t.getDragboard().hasString()
-                    && !t.getDragboard().getString().startsWith("[" + this))
-                t.acceptTransferModes(TransferMode.MOVE);
-            t.consume();
-        });
+        tableView.setOnDragOver(this::onDragOver);
         // --Drag Dropped
-        tableView.setOnDragDropped(t -> {
-            StringBuilder entries = new StringBuilder(t.getDragboard().getString());
-            for(int i = 0; i < entries.length(); i++) {
-                if(entries.charAt(i) == ']') {
-                    entries.delete(0, i + 1);
-                    break;
-                }
-            }
-
-            telefonEntries.addAll(FileManager.fromJson(entries.toString()));
-            t.consume();
-        });
+        tableView.setOnDragDropped(t -> onDrop(t, telefonEntries));
         tableView.setEditable(true);
     }
+
+    public void onDrag(MouseEvent t) {
+        Dragboard db = tableView.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent content = new ClipboardContent();
+        content.putString(
+                "[" + this + "]"
+                        + FileUtility.asJSONString(tableView.getSelectionModel().getSelectedItems())
+        );
+        db.setContent(content);
+        t.consume();
+    }
+
+    public void onDragOver(DragEvent t) {
+        if (t.getDragboard().hasString()
+                && !t.getDragboard().getString().startsWith("[" + this))
+            t.acceptTransferModes(TransferMode.MOVE);
+        t.consume();
+    }
+
+    public void onDrop(DragEvent t, ObservableList<TelefonEntry> telefonEntries) {
+        StringBuilder entries = new StringBuilder(t.getDragboard().getString());
+        for (int i = 0; i < entries.length(); i++) {
+            if (entries.charAt(i) == ']') {
+                entries.delete(0, i + 1);
+                break;
+            }
+        }
+        telefonEntries.addAll(FileUtility.fromJson(entries.toString()));
+        t.consume();
+    }
+
+
     public void setItems(List<TelefonEntry> items) {
         if (items instanceof ObservableList) {
             tableView.setItems((ObservableList<TelefonEntry>) items);
@@ -148,7 +152,7 @@ public class EntryArea {
 
         private void createTextField() {
             textField = new TextField(getString());
-            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap()* 2);
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
             textField.focusedProperty().addListener((arg0, arg1, arg2) -> {
                 if (!arg2) {
                     commitEdit(textField.getText());

@@ -49,7 +49,7 @@ public class NewWindow extends Stage {
         String fileNameText = fileName.getText().strip();
         String[] splittedName = fileNameText.split("\\s");
         StringBuilder newFileName = new StringBuilder();
-        for(String s : splittedName) {
+        for (String s : splittedName) {
             newFileName.append(s);
         }
 
