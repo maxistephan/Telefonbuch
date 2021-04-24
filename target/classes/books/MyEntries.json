@@ -1,16 +1,1 @@
-[
-  {
-    "name": {
-      "first": "Paul",
-      "last": ""
-    },
-    "number": "0175/713663"
-  },
-  {
-    "name": {
-      "first": "Peter",
-      "last": "Lustig"
-    },
-    "number": "0175/2148832"
-  }
-]
+[{"name":{"first":"Paul","last":""},"number":"0175/713663"},{"name":{"first":"Peter","last":"Lustig"},"number":"0175/2148832"}]

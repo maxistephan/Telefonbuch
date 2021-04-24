@@ -12,9 +12,6 @@ import javafx.stage.Stage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FileListWindow extends Stage {
@@ -48,8 +45,9 @@ public class FileListWindow extends Stage {
             if (filename.equals(""))
                 return;
             try {
-                Method m = getClass().getDeclaredMethod(function, String.class, BookStage.class);
-                m.invoke(this, filename, currentBook);
+                Method m = currentBook.getClass().getDeclaredMethod(function, String.class);
+                m.invoke(currentBook, filename);
+                close();
             } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -58,31 +56,10 @@ public class FileListWindow extends Stage {
         AnchorPane.setLeftAnchor(open, 80.0);
         AnchorPane.setRightAnchor(open, 80.0);
 
-        // --Apply
+        // --Add
         anchorPane.getChildren().addAll(files, open);
 
         // --Show
         show();
-    }
-
-    private void Open(String filename, BookStage currentBook) {
-        ArrayList<BookStage> currentBooks = BookStage.getInstances();
-
-        for (BookStage bs : currentBooks) {
-            if (bs.getTitle().equals(filename)) {
-                this.close();
-                return;
-            }
-        }
-        new BookStage(filename).show();
-        this.close();
-    }
-
-    private void Import(String filename, BookStage currentBook) {
-        String[] filepathString = Arrays.copyOf(FileUtility.pathToBooks, FileUtility.pathToBooks.length + 1);
-        filepathString[FileUtility.pathToBooks.length] = filename + ".json";
-        Path filepath = FileSystems.getDefault().getPath(FileUtility.first, filepathString);
-        currentBook.getTelefonBook().load(filepath);
-        this.close();
     }
 }

@@ -4,6 +4,7 @@ import hsa.maxist.se.telefonbuch.data.TelefonBook;
 import hsa.maxist.se.telefonbuch.ui.menu.FileListWindow;
 import hsa.maxist.se.telefonbuch.ui.menu.NewWindow;
 import hsa.maxist.se.telefonbuch.util.FileUtility;
+import javafx.beans.binding.When;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -85,7 +86,7 @@ public class BookStage extends Stage {
             //new
             MenuItem newFile = new MenuItem("New");
             newFile.onActionProperty().setValue(t ->
-                    new NewWindow(BookStage.this)
+                    new NewWindow()
             );
             //open
             MenuItem open = new MenuItem("Open");
@@ -105,20 +106,25 @@ public class BookStage extends Stage {
 
             // --Edit Menu
             Menu editMenu = new Menu("Edit");
+            //delete all
+            MenuItem deleteAll = new MenuItem("Delete all");
+            deleteAll.onActionProperty().setValue(t ->
+                BookStage.this.telefonBook.delete(telefonBook.getTelefonNumbers())
+            );
+
+            editMenu.getItems().addAll(deleteAll);
 
             // --View Menu
             Menu viewMenu = new Menu("View");
-
-            // Fullscreen Toggle
-            MenuItem fullscreenToggle = new MenuItem((
-                    BookStage.this.isFullScreen() ? "Exit" : "Enter") + " Fullscreen");
-            fullscreenToggle.onActionProperty().setValue(t -> {
-                BookStage.this.setFullScreen(!BookStage.this.isFullScreen());
-                fullscreenToggle.setText((BookStage.this.isFullScreen()
-                        ? "Exit"
-                        : "Enter")
-                        + " Fullscreen");
-            });
+            //fullscreen toggle
+            MenuItem fullscreenToggle = new MenuItem("Fullscreen");
+            fullscreenToggle.textProperty().bind(
+                    new When(BookStage.this.fullScreenProperty())
+                            .then("Exit Full Screen")
+                            .otherwise("Full Screen"));
+            fullscreenToggle.onActionProperty().setValue(t ->
+                BookStage.this.setFullScreen(!BookStage.this.isFullScreen())
+            );
 
             viewMenu.getItems().addAll(fullscreenToggle);
 
@@ -126,12 +132,33 @@ public class BookStage extends Stage {
         }
     }
 
-    public TelefonBook getTelefonBook() {
-        return telefonBook;
-    }
-
     public static ArrayList<BookStage> getInstances() {
         return instances;
+    }
+
+    /*******************************************************************************************************************
+     * Opens a new Book
+     * @param filename Name of the File to open (without the .json Extension)
+     ******************************************************************************************************************/
+    public static void Open(String filename) {
+        ArrayList<BookStage> currentBooks = getInstances();
+
+        for (BookStage bs : currentBooks) {
+            if (bs.getTitle().equals(filename)) {
+                return;
+            }
+        }
+        new BookStage(filename).show();
+    }
+
+    /*******************************************************************************************************************
+     * Imports entries from a Book
+     * @param filename Name of the File to import (without the .json Extension)
+     ******************************************************************************************************************/
+    public void Import(String filename) {
+        String[] filepathString = Arrays.copyOf(FileUtility.pathToBooks, FileUtility.pathToBooks.length + 1);
+        filepathString[FileUtility.pathToBooks.length] = filename + ".json";
+        telefonBook.load(FileSystems.getDefault().getPath(FileUtility.first, filepathString));
     }
 
     @Override

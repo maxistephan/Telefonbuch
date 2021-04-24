@@ -1,6 +1,7 @@
 package hsa.maxist.se.telefonbuch.ui.menu;
 
 import hsa.maxist.se.telefonbuch.ui.BookStage;
+import hsa.maxist.se.telefonbuch.util.FileUtility;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -8,11 +9,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 public class NewWindow extends Stage {
 
     private final TextField fileName = new TextField("enter name");
 
-    public NewWindow(Stage currentStage) {
+    public NewWindow() {
 
         // --Panes
         AnchorPane anchorPane = new AnchorPane();
@@ -47,13 +50,22 @@ public class NewWindow extends Stage {
 
     private void buttonAction() {
         String fileNameText = fileName.getText().strip();
+        if(fileNameText.equals(""))
+            return;
         String[] splittedName = fileNameText.split("\\s");
         StringBuilder newFileName = new StringBuilder();
         for (String s : splittedName) {
             newFileName.append(s);
         }
 
+        if(Arrays.stream(FileUtility.getFileNames(false))
+                .anyMatch(fileName -> fileName.equals(newFileName.toString()))) {
+            BookStage.Open(newFileName.toString());
+            close();
+            return;
+        }
+
         new BookStage(newFileName.toString()).show();
-        this.close();
+        close();
     }
 }
