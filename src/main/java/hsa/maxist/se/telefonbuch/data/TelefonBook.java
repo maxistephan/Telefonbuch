@@ -73,7 +73,7 @@ public class TelefonBook implements Iterable<TelefonEntry> {
     }
 
     public void save(Path path) {
-        if (confirmedPath(path)) {
+        if (confirmPath(path)) {
             JsonFactory factory = new JsonFactory();
             try (OutputStream os = Files.newOutputStream(path);
                  JsonGenerator jg = factory.createGenerator(os)) {
@@ -87,7 +87,7 @@ public class TelefonBook implements Iterable<TelefonEntry> {
     }
 
     public void load(Path path) {
-        if (confirmedPath(path)) {
+        if (confirmPath(path)) {
             try (InputStream is = Files.newInputStream(path)) {
 
                 JsonNode rootArray = MAPPER.readTree(is);
@@ -136,7 +136,7 @@ public class TelefonBook implements Iterable<TelefonEntry> {
         return content.toString();
     }
 
-    private boolean confirmedPath(Path filepath) {
+    private boolean confirmPath(Path filepath) {
         File f = new File(String.valueOf(filepath));
         try {
             if (f.exists())

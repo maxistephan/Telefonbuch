@@ -25,10 +25,10 @@ public class BookStage extends Stage {
     private static final ArrayList<BookStage> instances = new ArrayList<>();
     private final Path filepath;
     private final TelefonBook telefonBook;
-    public static final String defaultName = "NewBook";
+    public static final String DEFAULT_NAME = "NewBook";
 
     public BookStage() {
-        this(defaultName);
+        this(DEFAULT_NAME);
     }
 
     public BookStage(String name, boolean fullscreen) {
@@ -40,7 +40,7 @@ public class BookStage extends Stage {
         BorderPane root = new BorderPane();
 
         // --Fenster Einstellen
-        setTitle(name.equals("") ? defaultName : name);
+        setTitle(name.equals("") ? DEFAULT_NAME : name);
         setScene(new Scene(root, 370, 400));
 
         // --Filepath
@@ -78,6 +78,7 @@ public class BookStage extends Stage {
     }
 
     private class TelefonMenu extends MenuBar {
+
 
         public TelefonMenu(EventHandler<ActionEvent> onSave) {
 
@@ -132,8 +133,12 @@ public class BookStage extends Stage {
         }
     }
 
-    public static ArrayList<BookStage> getInstances() {
-        return instances;
+    public static BookStage[] getInstances() {
+        BookStage[] bookStages = new BookStage[instances.size()];
+        for(int i = 0; i < bookStages.length; i++) {
+            bookStages[i] = instances.get(i);
+        }
+        return bookStages;
     }
 
     /*******************************************************************************************************************
@@ -141,7 +146,7 @@ public class BookStage extends Stage {
      * @param filename Name of the File to open (without the .json Extension)
      ******************************************************************************************************************/
     public static void Open(String filename) {
-        ArrayList<BookStage> currentBooks = getInstances();
+        BookStage[] currentBooks = getInstances();
 
         for (BookStage bs : currentBooks) {
             if (bs.getTitle().equals(filename)) {
